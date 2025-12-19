@@ -36,7 +36,7 @@ export function createFilesStore(dataDir) {
       );
     },
 
-    add({ originalName, storedName, size, mime, filePathOnDisk, thumbPath = null, isVideo = false }) {
+    add({ originalName, storedName, size, mime, filePathOnDisk, thumbPath = null, isVideo = false, folderId = null }) {
       const data = read();
 
       const item = {
@@ -48,6 +48,7 @@ export function createFilesStore(dataDir) {
         path: filePathOnDisk,
         thumbPath,
         isVideo,
+        folderId,
         createdAt: new Date().toISOString(),
       };
 

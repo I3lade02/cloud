@@ -9,6 +9,9 @@ import { makeFilesRouter } from "./routes/files.js";
 import { createFilesStore } from "./store/filesStore.js";
 import { makeAuthRouter } from "./routes/auth.js";
 import { requireAuth } from "./middleware/requireAuth.js";
+import { createFoldersStore } from "./store/foldersStore.js";
+import { makeFoldersRouter } from "./routes/folders.js";
+import { makeStatsRouter } from "./routes/stats.js";
 
 dotenv.config();
 
@@ -20,6 +23,7 @@ const port = process.env.PORT || 3001;
 const uploadDir = process.env.UPLOAD_DIR || "./uploads";
 const dataDir = process.env.DATA_DIR || "./data";
 const thumbsDir = process.env.THUMBS_DIR || "./thumbs";
+const foldersStore = createFoldersStore(dataDir);
 
 const store = createFilesStore(dataDir);
 
@@ -35,8 +39,12 @@ app.use("/api/auth", makeAuthRouter());
 app.use(
   "/api/files",
   requireAuth,
-  makeFilesRouter({ uploadDir, thumbsDir, store })
+  makeFilesRouter({ uploadDir, thumbsDir, store, foldersStore })
 );
+
+app.use("/api/folders", requireAuth, makeFoldersRouter({ foldersStore, filesStore: store }));
+
+app.use("/api/stats", requireAuth, makeStatsRouter({ filesStore: store, storagePath: uploadDir }));
 
 // Serve React build (single URL)
 const __filename = fileURLToPath(import.meta.url);

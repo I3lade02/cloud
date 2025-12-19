@@ -1,19 +1,19 @@
 import jwt from "jsonwebtoken";
+import { authJwtSecret } from "../utils/authConfig.js";
 
 export function requireAuth(req, res, next) {
   const header = req.headers.authorization || "";
-  const token = header.startsWith("Bearer ")
-    ? header.slice(7)
-    : null;
+  let token = null;
 
-  if (!token) {
-    return res.status(401).json({ error: "Missing token" });
-  }
+  if (header.startsWith("Bearer ")) token = header.slice(7);
+  if (!token && req.query?.token) token = String(req.query.token);
+
+  if (!token) return res.status(401).json({ error: "Unauthorized" });
 
   try {
-    req.user = jwt.verify(token, process.env.AUTH_JWT_SECRET);
+    req.user = jwt.verify(token, authJwtSecret);
     next();
   } catch {
-    return res.status(401).json({ error: "Invalid or expired token" });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 }
