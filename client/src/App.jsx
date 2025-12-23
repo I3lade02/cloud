@@ -371,49 +371,54 @@ function FileTile({
           {file.createdAt && <span>{formatDate(file.createdAt)}</span>}
         </div>
 
-        <div className="mt-3 flex items-center gap-3">
-          {(isVid || isAud || isImg) && (
+        <div className="mt-3 space-y-2">
+          {/* Row 1: primary actions */}
+          <div className="flex items-center gap-3">
+            {(isVid || isAud || isImg) && (
+              <button
+                className="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:underline disabled:opacity-60"
+                onClick={() => onOpen(file)}
+                disabled={busy}
+                type="button"
+              >
+                {isVid ? "Play" : isAud ? "Play" : "View"}
+              </button>
+            )}
+
+            <a className="text-sm font-semibold text-blue-600 hover:underline" href={downloadUrl}>
+              Download
+            </a>
+          
+            {/* Always visible */}
             <button
-              className="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:underline disabled:opacity-60"
-              onClick={() => onOpen(file)}
+              className="ml-auto text-sm font-semibold text-red-600 hover:underline disabled:opacity-60"
+              onClick={() => onDelete(file.id, file.originalName)}
               disabled={busy}
               type="button"
             >
-              {isVid ? "Play" : isAud ? "Play" : "View"}
+              Delete
             </button>
-          )}
-
-          <a
-            className="text-sm font-semibold text-blue-600 hover:underline"
-            href={downloadUrl}
-          >
-            Download
-          </a>
-
-          {/* Move UI */}
-          <select
-            value={file.folderId || ""}
-            disabled={busy}
-            onChange={(e) => onMove(file.id, e.target.value || null)}
-            className="text-sm rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 py-1.5"
-            title="Move to folder"
-          >
-            <option value="">All files</option>
-            {folders.map((fo) => (
-              <option key={fo.id} value={fo.id}>
-                {fo.name}
-              </option>
-            ))}
-          </select>
-
-          <button
-            className="ml-auto text-sm font-semibold text-red-600 hover:underline disabled:opacity-60"
-            onClick={() => onDelete(file.id, file.originalName)}
-            disabled={busy}
-            type="button"
-          >
-            Delete
-          </button>
+          </div>
+          
+          {/* Row 2: move */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-500 dark:text-slate-400">Move to:</span>
+          
+            <select
+              value={file.folderId || ""}
+              disabled={busy}
+              onChange={(e) => onMove(file.id, e.target.value || null)}
+              className="flex-1 text-sm rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 py-1.5"
+              title="Move to folder"
+            >
+              <option value="">All files</option>
+              {folders.map((fo) => (
+                <option key={fo.id} value={fo.id}>
+                  {fo.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
     </div>
