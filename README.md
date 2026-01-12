@@ -12,8 +12,8 @@ It allows you to upload, organize, preview, and stream files directly from your 
 - 🔐 Password-protected access (JWT authentication)
 - 📁 Multi-file upload & download (drag & drop)
 - 🗂️ Folder system (move files between folders)
-- 🎞️ Video streaming with thumbnails
-- 🎵 Audio streaming (MP3, etc.)
+- 🎞️ Video streaming with thumbnails (currently not working)
+- 🎵 Audio streaming (MP3, etc.) (currently not working)
 - 🖼️ Image previews
 - 📊 Storage statistics
 - 🌗 Light / Dark theme toggle
