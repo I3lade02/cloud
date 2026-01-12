@@ -90,7 +90,7 @@ sudo apt install -y nodejs npm ffmpeg git
 
 ### 2️⃣ Clone the repository
 ```bash
-git clone <your-repo-url> ~/cloud
+git clone https://github.com/I3lade02/cloud
 cd ~/cloud
 ```
 
