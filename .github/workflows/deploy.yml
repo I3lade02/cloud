@@ -1,0 +1,38 @@
+name: Deploy to Raspberry
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PI_HOST }}
+          username: ${{ secrets.PI_USER }}
+          key: ${{ secrets.PI_SSH_KEY }}
+          port: ${{ secrets.PI_PORT }}
+          script: |
+            set -e
+            cd /home/picloud/cloud
+
+            # Update code
+            git fetch --all
+            git reset --hard origin/main
+
+            # --- OPTIONAL build/install (choose what matches your app) ---
+            # Node:
+            # npm ci
+            # npm run build || true
+
+            # Python:
+            # python3 -m venv .venv
+            # . .venv/bin/activate
+            # pip install -r requirements.txt
+
+            # Restart service
+            sudo systemctl restart picloud
+            sudo systemctl --no-pager status picloud | sed -n '1,30p'
